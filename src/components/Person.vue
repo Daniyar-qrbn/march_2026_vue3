@@ -1,35 +1,34 @@
 <template>
     <div class="person">
-        <h2>姓名:{{name}}</h2>
-        <h2>年龄:{{age}}</h2>
-        <h2>电话:{{tel}}</h2>
-        <button @click="changeName">修改名字</button>
-        <button @click="changeAge">修改年龄</button>
-        <button @click="show">查看</button>
+        姓:<input type="text" v-model="firstName"> <br>
+        名:<input type="text" v-model="lastName"> <br>
+        <!-- 全名:<span>{{firstName.slice(0,1).toUpperCase()+firstName.slice(1,)}}{{lastName}}</span> <br> -->
+        <!-- //用计算属性(compute): -->
+        <span>{{fullName}}</span><br>
+        <button @click="changeFullName">更改</button>
     </div>
 </template>
 
-<script>
-    export default {
-        name: 'Person',
-        setup() {
-            // 数据
-            let name = '达尼亚尔' //此时的name不是响应式的
-            let age = 23 //此时的age不是响应式的
-            let tel = '176'
-            // 方法
-            function changeName() {
-                name = '达尼亚尔·库尔班江'
-            }
-            function changeAge() {
-                age++
-            }
-            function show() {
-                console.log("as")
-                alert(tel)
-            }
-            return { name, age, tel, changeAge, changeName, show }
+<script setup name="hihi" lang="ts">
+    import { ref, computed } from "vue"
+    let firstName = ref("zhang")
+    let lastName = ref("san")
+    // 这么定义的fullName是计算属性,且是只读的
+    // let fullName = computed(() => {
+    // return firstName.value.slice(0, 1).toUpperCase() + firstName.value.slice(1) + "-" + lastName.value
+    // })
+    let fullName = computed({
+        get() {
+            return firstName.value.slice(0, 1).toUpperCase() + firstName.value.slice(1) + "-" + lastName.value
+        },
+        set(v) {
+            let [a, b] = v.split("-")
+            firstName.value = a
+            lastName.value = b
         }
+    })
+    function changeFullName() {
+        fullName.value = "li-si"
     }
 </script>
 
@@ -43,5 +42,9 @@
 
     button {
         margin: 0 5px;
+    }
+
+    li {
+        font-size: 20px;
     }
 </style>
